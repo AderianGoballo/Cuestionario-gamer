@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente de Juegos con IA</title>
+    <title>GameMaster AI - Asistente de Juegos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6a11cb;
             --secondary: #2575fc;
             --accent: #ff6b6b;
             --light: #f8f9fa;
-            --dark: #212529;
+            --dark: #0d1117;
+            --dark-bg: #0a0e14;
             --success: #2ecc71;
-            --warning: #f39c12;
-            --error: #e74c3c;
+            --ai-blue: #4e54c8;
+            --ai-purple: #8f94fb;
+            --neon-blue: #00ccff;
+            --neon-pink: #ff00aa;
+            --neon-green: #00ff99;
+            --gamer-red: #ff2a6d;
+            --gamer-blue: #05d9e8;
+            --gamer-purple: #d300c5;
         }
         
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Exo 2', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--dark);
+            background: radial-gradient(circle, var(--dark-bg) 0%, #0a0a1a 100%);
+            color: white;
             min-height: 100vh;
             padding: 20px;
-            background-image: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             background-attachment: fixed;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.97);
+            background: rgba(13, 17, 23, 0.85);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.15), 0 15px 35px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             animation: fadeIn 0.8s ease-out;
+            border: 1px solid rgba(0, 204, 255, 0.2);
         }
         
         @keyframes fadeIn {
@@ -49,12 +57,14 @@
         }
         
         header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--gamer-blue) 0%, var(--gamer-purple) 100%);
             color: white;
-            padding: 35px 20px;
+            padding: 40px 20px 60px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            border-bottom: 3px solid var(--neon-blue);
+            box-shadow: 0 5px 20px rgba(5, 217, 232, 0.3);
         }
         
         header::before {
@@ -69,19 +79,40 @@
             opacity: 0.3;
         }
         
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.8rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.7);
+        }
+        
         h1 {
-            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem;
             margin-bottom: 10px;
             position: relative;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 0 15px rgba(0, 204, 255, 0.8);
+            letter-spacing: 1.5px;
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.9;
             position: relative;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
+            font-weight: 300;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
         }
         
         .content {
@@ -89,123 +120,205 @@
         }
         
         .question-group {
-            margin-bottom: 30px;
-            padding: 25px;
+            margin-bottom: 35px;
+            padding: 30px;
             border-radius: 15px;
-            background-color: #f0f5ff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e0e7ff;
-            transition: transform 0.3s ease;
-        }
-        
-        .question-group:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        h2 {
-            color: var(--primary);
-            margin-bottom: 18px;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        h2 i {
-            color: var(--secondary);
-        }
-        
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .option {
-            background: white;
-            border: 2px solid #e0e7ff;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
+            background: rgba(25, 30, 40, 0.6);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 204, 255, 0.15);
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .option:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .option.selected {
-            background-color: #eef2ff;
-            border-color: var(--primary);
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(106, 17, 203, 0.2);
-        }
-        
-        .option i {
-            font-size: 1.4rem;
-            color: var(--primary);
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e7ff;
-            border-radius: 12px;
-            margin-top: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
-        }
-        
-        button {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 16px 35px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            display: block;
-            margin: 35px auto;
-            width: 85%;
-            max-width: 320px;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
         }
         
-        button::after {
+        .question-group::before {
             content: "";
             position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 20px;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(25deg);
-            transition: all 0.8s;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gamer-blue), var(--gamer-purple));
+        }
+        
+        .question-group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 204, 255, 0.25);
+            border-color: rgba(0, 204, 255, 0.3);
+        }
+        
+        h2 {
+            color: var(--gamer-blue);
+            margin-bottom: 25px;
+            font-size: 1.7rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 8px rgba(5, 217, 232, 0.5);
+        }
+        
+        h2 i {
+            color: var(--neon-green);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        
+        .option {
+            background: rgba(20, 25, 35, 0.7);
+            border: 2px solid rgba(0, 204, 255, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .option:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 7px 20px rgba(0, 204, 255, 0.2);
+            background: rgba(30, 35, 45, 0.8);
+        }
+        
+        .option.selected {
+            background: rgba(0, 204, 255, 0.15);
+            border-color: var(--neon-blue);
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+        }
+        
+        .option i {
+            font-size: 1.6rem;
+            color: var(--neon-green);
+        }
+        
+        /* Tooltip styles */
+        .option .tooltip {
+            visibility: hidden;
+            width: 280px;
+            background: rgba(10, 15, 25, 0.95);
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 15px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.95rem;
+            font-weight: normal;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .option .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--neon-blue) transparent transparent transparent;
+        }
+        
+        .option:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tooltip strong {
+            color: var(--neon-green);
+            display: block;
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(20, 25, 35, 0.7);
+            border: 2px solid rgba(0, 204, 255, 0.2);
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--neon-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.1);
+            background: rgba(30, 35, 45, 0.8);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #a0a0c0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--gamer-blue) 0%, var(--gamer-purple) 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto;
+            width: 85%;
+            max-width: 350px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 7px 25px rgba(5, 217, 232, 0.4);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 0, 170, 0.5);
         }
         
-        button:hover::after {
-            left: 120%;
+        button:hover::before {
+            left: 100%;
         }
         
         #results {
@@ -214,13 +327,14 @@
         }
         
         .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid var(--neon-blue);
             border-radius: 50%;
             width: 60px;
             height: 60px;
             animation: spin 1.2s linear infinite;
             margin: 40px auto;
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
         }
         
         @keyframes spin {
@@ -229,184 +343,186 @@
         }
         
         .error {
-            color: var(--error);
-            background: #ffebee;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
             padding: 18px;
             border-radius: 12px;
             margin: 25px 0;
             text-align: center;
             display: none;
             font-weight: 500;
+            border: 1px solid rgba(255, 107, 107, 0.3);
         }
         
         footer {
             text-align: center;
-            padding: 25px;
+            padding: 30px;
             color: white;
-            font-size: 0.9rem;
-            background: rgba(0, 0, 0, 0.15);
+            font-size: 1rem;
+            background: rgba(10, 15, 25, 0.7);
             margin-top: 30px;
             border-radius: 0 0 20px 20px;
+            border-top: 1px solid rgba(0, 204, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
         
-        .analysis-section {
-            background: #f8f9ff;
-            border-radius: 18px;
-            padding: 30px;
-            margin: 25px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
-        }
-        
-        .analysis-header {
+        .footer-content {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eef2ff;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         
-        .ai-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
-        
-        .analysis-content {
-            line-height: 1.6;
-        }
-        
-        .analysis-points {
-            margin-top: 20px;
-            padding-left: 20px;
-        }
-        
-        .analysis-points li {
-            margin-bottom: 10px;
-            position: relative;
-            padding-left: 30px;
-        }
-        
-        .analysis-points li::before {
-            content: "•";
-            color: var(--primary);
-            font-size: 1.5rem;
-            position: absolute;
-            left: 0;
-            top: -5px;
-        }
-        
-        .response-summary {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .recommendation-item {
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            border-left: 5px solid var(--primary);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-        }
-        
-        .recommendation-title {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.3rem;
+        .footer-logo {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+        }
+        
+        .footer-links a {
+            color: var(--neon-green);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.7);
+        }
+        
+        .ai-recommendation {
+            background: rgba(25, 30, 40, 0.6);
+            border-radius: 18px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 204, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 204, 255, 0.2);
+        }
+        
+        .ai-icon {
+            font-size: 2.8rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px rgba(0, 204, 255, 0.5);
+        }
+        
+        .ai-content {
+            line-height: 1.7;
+            font-size: 1.15rem;
+        }
+        
+        .ai-content ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        
+        .ai-content li {
+            margin-bottom: 10px;
+        }
+        
+        .recommendation-item {
+            background: rgba(20, 25, 35, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 5px solid var(--neon-blue);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .game-title {
+            font-weight: bold;
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 8px rgba(0, 255, 153, 0.3);
+        }
+        
+        .game-description {
+            background: rgba(30, 35, 45, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 3px solid rgba(222, 226, 230, 0.3);
         }
         
         .explanation {
-            background: #f0f5ff;
-            padding: 15px;
+            background: rgba(0, 204, 255, 0.1);
+            padding: 18px;
             border-radius: 12px;
             margin-top: 15px;
-            font-style: italic;
-            border-left: 3px solid var(--secondary);
+            border-left: 3px solid var(--neon-blue);
+        }
+        
+        .price-info {
+            background: rgba(0, 255, 153, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 3px solid var(--neon-green);
         }
         
         .success-message {
             text-align: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #e8f4f8;
+            font-size: 1.7rem;
+            color: var(--neon-green);
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 15px rgba(0, 255, 153, 0.5);
+            border: 1px solid rgba(0, 255, 153, 0.2);
         }
         
-        .tag {
-            display: inline-block;
-            background: #eef2ff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin: 3px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .tag-group {
-            margin: 10px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        
-        .error-panel {
-            background: #ffebee;
-            border: 2px solid var(--error);
-            border-radius: 12px;
+        .info-box {
+            background: rgba(0, 204, 255, 0.1);
+            border-left: 4px solid var(--neon-blue);
             padding: 20px;
+            border-radius: 12px;
             margin: 20px 0;
-            text-align: center;
-            display: none;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
         }
         
-        .error-panel i {
-            font-size: 2rem;
-            color: var(--error);
-            margin-bottom: 15px;
+        .genre-count {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: var(--neon-blue);
+            font-style: italic;
         }
         
-        .connection-status {
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            display: none;
-        }
-        
-        .status-connected {
-            background: rgba(46, 204, 113, 0.2);
-            color: #27ae60;
-        }
-        
-        .status-error {
-            background: rgba(231, 76, 60, 0.2);
-            color: #c0392b;
-        }
-        
-        @media (max-width: 650px) {
+        @media (max-width: 768px) {
             .options-grid {
                 grid-template-columns: 1fr;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.3rem;
             }
             
             .content {
@@ -414,27 +530,45 @@
             }
             
             .question-group {
-                padding: 20px;
+                padding: 25px 20px;
             }
             
             button {
                 width: 90%;
-                padding: 14px 25px;
-                font-size: 1.1rem;
+                padding: 16px 30px;
+                font-size: 1.2rem;
             }
             
-            .analysis-header {
-                flex-direction: column;
-                text-align: center;
+            .option .tooltip {
+                width: 250px;
+                font-size: 0.85rem;
             }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 204, 255, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 204, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 204, 255, 0); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-gamepad"></i> Asistente de Juegos con IA</h1>
-            <p class="subtitle">Encuentra los juegos perfectos con inteligencia artificial</p>
+            <div class="logo">
+                <i class="fas fa-robot logo-icon"></i>
+                <h1>GAMEMASTER AI</h1>
+            </div>
+            <p class="subtitle">Recomendaciones personalizadas de juegos con tecnología OpenRouter</p>
         </header>
         
         <div class="content">
@@ -447,57 +581,137 @@
                         <option value="6-8">6-8 años</option>
                         <option value="9-12">9-12 años</option>
                         <option value="13-15">13-15 años</option>
-                        <option value="16+">16+ años</option>
+                        <option value="16-18">16-18 años</option>
+                        <option value="19-25">19-25 años</option>
+                        <option value="26+">26+ años</option>
                     </select>
                 </div>
                 
                 <div class="question-group">
                     <h2><i class="fas fa-laptop"></i> 2. ¿Qué plataformas tiene disponibles?</h2>
                     <div class="options-grid" id="platforms">
-                        <div class="option" data-value="Nintendo Switch">
+                        <div class="option" data-value="Nintendo Switch" data-tooltip="Consola híbrida portátil/de sobremesa de Nintendo">
                             <i class="fab fa-nintendo-switch"></i> Nintendo Switch
+                            <span class="tooltip">Consola híbrida portátil/de sobremesa de Nintendo<br><strong>Ej: The Legend of Zelda, Mario Kart</strong></span>
                         </div>
-                        <div class="option" data-value="PlayStation">
-                            <i class="fab fa-playstation"></i> PlayStation
+                        <div class="option" data-value="PlayStation 5" data-tooltip="Última consola de Sony con gráficos de última generación">
+                            <i class="fab fa-playstation"></i> PlayStation 5
+                            <span class="tooltip">Última consola de Sony con gráficos de última generación<br><strong>Ej: God of War, Spider-Man</strong></span>
                         </div>
-                        <div class="option" data-value="Xbox">
-                            <i class="fab fa-xbox"></i> Xbox
+                        <div class="option" data-value="PlayStation 4" data-tooltip="Consola anterior de Sony, aún muy popular">
+                            <i class="fab fa-playstation"></i> PlayStation 4
+                            <span class="tooltip">Consola anterior de Sony, aún muy popular<br><strong>Ej: The Last of Us, Uncharted</strong></span>
                         </div>
-                        <div class="option" data-value="PC">
-                            <i class="fas fa-desktop"></i> PC
+                        <div class="option" data-value="Xbox Series X/S" data-tooltip="Últimas consolas de Microsoft con Game Pass">
+                            <i class="fab fa-xbox"></i> Xbox Series X/S
+                            <span class="tooltip">Últimas consolas de Microsoft con Game Pass<br><strong>Ej: Halo Infinite, Forza Horizon</strong></span>
                         </div>
-                        <div class="option" data-value="Móvil/Tablet">
-                            <i class="fas fa-mobile-alt"></i> Móvil/Tablet
+                        <div class="option" data-value="Xbox One" data-tooltip="Consola anterior de Microsoft">
+                            <i class="fab fa-xbox"></i> Xbox One
+                            <span class="tooltip">Consola anterior de Microsoft<br><strong>Ej: Gears of War, Sea of Thieves</strong></span>
+                        </div>
+                        <div class="option" data-value="PC Windows" data-tooltip="Computadora personal con sistema operativo Windows">
+                            <i class="fas fa-desktop"></i> PC Windows
+                            <span class="tooltip">Computadora personal con sistema operativo Windows<br><strong>Ej: League of Legends, World of Warcraft</strong></span>
+                        </div>
+                        <div class="option" data-value="Mac" data-tooltip="Computadoras Apple con sistema macOS">
+                            <i class="fab fa-apple"></i> Mac
+                            <span class="tooltip">Computadoras Apple con sistema macOS<br><strong>Ej: Stardew Valley, Civilization VI</strong></span>
+                        </div>
+                        <div class="option" data-value="Móvil Android" data-tooltip="Teléfonos y tablets con sistema operativo Android">
+                            <i class="fab fa-android"></i> Android
+                            <span class="tooltip">Teléfonos y tablets con sistema operativo Android<br><strong>Ej: Clash Royale, Among Us</strong></span>
+                        </div>
+                        <div class="option" data-value="Móvil iOS" data-tooltip="iPhone y iPad de Apple">
+                            <i class="fab fa-apple"></i> iOS
+                            <span class="tooltip">iPhone y iPad de Apple<br><strong>Ej: PUBG Mobile, Genshin Impact</strong></span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="question-group">
-                    <h2><i class="fas fa-chess"></i> 3. ¿Qué tipo de juegos le gustan?</h2>
+                    <h2><i class="fas fa-chess"></i> 3. ¿Qué tipo de juegos le gustan? (Selecciona hasta 5)</h2>
+                    <p class="genre-count">Seleccionados: <span id="selected-count">0</span>/5</p>
                     <div class="options-grid" id="genres">
-                        <div class="option" data-value="Aventura">
+                        <div class="option" data-value="Aventura" data-tooltip="Juegos con exploración, historia y descubrimiento">
                             <i class="fas fa-map"></i> Aventura
+                            <span class="tooltip">Juegos con exploración, historia y descubrimiento<br><strong>Ej: The Legend of Zelda, Uncharted</strong></span>
                         </div>
-                        <div class="option" data-value="Plataformas">
+                        <div class="option" data-value="Plataformas" data-tooltip="Saltar entre plataformas y superar obstáculos">
                             <i class="fas fa-running"></i> Plataformas
+                            <span class="tooltip">Saltar entre plataformas y superar obstáculos<br><strong>Ej: Super Mario, Celeste</strong></span>
                         </div>
-                        <div class="option" data-value="Carreras">
+                        <div class="option" data-value="Carreras" data-tooltip="Competiciones de velocidad con vehículos">
                             <i class="fas fa-car"></i> Carreras
+                            <span class="tooltip">Competiciones de velocidad con vehículos<br><strong>Ej: Forza Horizon, Mario Kart</strong></span>
                         </div>
-                        <div class="option" data-value="Deportes">
+                        <div class="option" data-value="Deportes" data-tooltip="Simulaciones de deportes reales como fútbol, baloncesto">
                             <i class="fas fa-football-ball"></i> Deportes
+                            <span class="tooltip">Simulaciones de deportes reales como fútbol, baloncesto<br><strong>Ej: FIFA, NBA 2K</strong></span>
                         </div>
-                        <div class="option" data-value="Construcción">
+                        <div class="option" data-value="Construcción" data-tooltip="Crear y construir estructuras o mundos">
                             <i class="fas fa-cubes"></i> Construcción
+                            <span class="tooltip">Crear y construir estructuras o mundos<br><strong>Ej: Minecraft, Terraria</strong></span>
                         </div>
-                        <div class="option" data-value="Puzzles">
+                        <div class="option" data-value="Puzzles" data-tooltip="Resolver acertijos y desafíos mentales">
                             <i class="fas fa-puzzle-piece"></i> Puzzles
+                            <span class="tooltip">Resolver acertijos y desafíos mentales<br><strong>Ej: Portal, The Witness</strong></span>
                         </div>
-                        <div class="option" data-value="Acción">
+                        <div class="option" data-value="Acción" data-tooltip="Énfasis en combate físico y desafíos de reflejos">
                             <i class="fas fa-fist-raised"></i> Acción
+                            <span class="tooltip">Énfasis en combate físico y desafíos de reflejos<br><strong>Ej: God of War, Devil May Cry</strong></span>
                         </div>
-                        <div class="option" data-value="Multijugador">
+                        <div class="option" data-value="Multijugador" data-tooltip="Juegos diseñados para jugar con otros">
                             <i class="fas fa-users"></i> Multijugador
+                            <span class="tooltip">Juegos diseñados para jugar con otros<br><strong>Ej: Fortnite, Among Us</strong></span>
+                        </div>
+                        <div class="option" data-value="RPG" data-tooltip="Juegos de rol con desarrollo de personaje y estadísticas">
+                            <i class="fas fa-dragon"></i> RPG
+                            <span class="tooltip">Juegos de rol con desarrollo de personaje y estadísticas<br><strong>Ej: The Witcher, Skyrim</strong></span>
+                        </div>
+                        <div class="option" data-value="Estrategia" data-tooltip="Planificación a largo plazo y toma de decisiones">
+                            <i class="fas fa-chess"></i> Estrategia
+                            <span class="tooltip">Planificación a largo plazo y toma de decisiones<br><strong>Ej: Civilization, StarCraft</strong></span>
+                        </div>
+                        <div class="option" data-value="Simulación" data-tooltip="Imitación de actividades reales como conducir o volar">
+                            <i class="fas fa-car-side"></i> Simulación
+                            <span class="tooltip">Imitación de actividades reales como conducir o volar<br><strong>Ej: Microsoft Flight Simulator, Euro Truck Simulator</strong></span>
+                        </div>
+                        <div class="option" data-value="Terror" data-tooltip="Juegos diseñados para asustar o crear tensión">
+                            <i class="fas fa-ghost"></i> Terror
+                            <span class="tooltip">Juegos diseñados para asustar o crear tensión<br><strong>Ej: Resident Evil, Silent Hill</strong></span>
+                        </div>
+                        <div class="option" data-value="Shooter" data-tooltip="Juegos de disparos en primera o tercera persona">
+                            <i class="fas fa-crosshairs"></i> Shooter
+                            <span class="tooltip">Juegos de disparos en primera o tercera persona<br><strong>Ej: Call of Duty, Counter-Strike</strong></span>
+                        </div>
+                        <div class="option" data-value="Lucha" data-tooltip="Combates uno contra uno con personajes">
+                            <i class="fas fa-hand-rock"></i> Lucha
+                            <span class="tooltip">Combates uno contra uno con personajes<br><strong>Ej: Street Fighter, Super Smash Bros</strong></span>
+                        </div>
+                        <div class="option" data-value="Musical/Ritmo" data-tooltip="Juegos basados en música y sincronización">
+                            <i class="fas fa-music"></i> Musical/Ritmo
+                            <span class="tooltip">Juegos basados en música y sincronización<br><strong>Ej: Guitar Hero, Beat Saber</strong></span>
+                        </div>
+                        <div class="option" data-value="Educativo" data-tooltip="Juegos que enseñan mientras entretienen">
+                            <i class="fas fa-graduation-cap"></i> Educativo
+                            <span class="tooltip">Juegos que enseñan mientras entretienen<br><strong>Ej: Kerbal Space Program, Minecraft: Education Edition</strong></span>
+                        </div>
+                        <div class="option" data-value="MMO" data-tooltip="Juegos multijugador masivos en línea">
+                            <i class="fas fa-globe"></i> MMO
+                            <span class="tooltip">Juegos multijugador masivos en línea<br><strong>Ej: World of Warcraft, Final Fantasy XIV</strong></span>
+                        </div>
+                        <div class="option" data-value="Battle Royale" data-tooltip="Modo de juego donde los jugadores compiten hasta quedar uno">
+                            <i class="fas fa-skull"></i> Battle Royale
+                            <span class="tooltip">Modo de juego donde los jugadores compiten hasta quedar uno<br><strong>Ej: Fortnite, PUBG</strong></span>
+                        </div>
+                        <div class="option" data-value="Roguelike" data-tooltip="Juegos con muerte permanente y generación procedural">
+                            <i class="fas fa-redo"></i> Roguelike
+                            <span class="tooltip">Juegos con muerte permanente y generación procedural<br><strong>Ej: Hades, Dead Cells</strong></span>
+                        </div>
+                        <div class="option" data-value="Sandbox" data-tooltip="Mundos abiertos con libertad creativa">
+                            <i class="fas fa-box-open"></i> Sandbox
+                            <span class="tooltip">Mundos abiertos con libertad creativa<br><strong>Ej: Grand Theft Auto, Red Dead Redemption</strong></span>
                         </div>
                     </div>
                 </div>
@@ -505,195 +719,324 @@
                 <div class="question-group">
                     <h2><i class="fas fa-heart"></i> 4. ¿Prefiere juegos...?</h2>
                     <div class="options-grid" id="preferences">
-                        <div class="option" data-value="acción rápida">
+                        <div class="option" data-value="acción rápida" data-tooltip="Juegos con ritmo acelerado y mucha emoción">
                             <i class="fas fa-bolt"></i> De acción rápida
+                            <span class="tooltip">Juegos con ritmo acelerado y mucha emoción<br><strong>Ej: Doom Eternal, Titanfall 2</strong></span>
                         </div>
-                        <div class="option" data-value="tranquilos/exploración">
+                        <div class="option" data-value="tranquilos/exploración" data-tooltip="Juegos relajados con énfasis en exploración">
                             <i class="fas fa-spa"></i> Tranquilos/Exploración
+                            <span class="tooltip">Juegos relajados con énfasis en exploración<br><strong>Ej: Journey, Abzû</strong></span>
                         </div>
-                        <div class="option" data-value="sesiones cortas">
+                        <div class="option" data-value="sesiones cortas" data-tooltip="Partidas rápidas que se pueden jugar en poco tiempo">
                             <i class="fas fa-hourglass-half"></i> Sesiones cortas
+                            <span class="tooltip">Partidas rápidas que se pueden jugar en poco tiempo<br><strong>Ej: Rocket League, Fall Guys</strong></span>
                         </div>
-                        <div class="option" data-value="sesiones largas">
+                        <div class="option" data-value="sesiones largas" data-tooltip="Juegos que requieren tiempo para progresar">
                             <i class="fas fa-hourglass-end"></i> Sesiones largas
+                            <span class="tooltip">Juegos que requieren tiempo para progresar<br><strong>Ej: The Witcher 3, Red Dead Redemption 2</strong></span>
+                        </div>
+                        <div class="option" data-value="narrativa profunda" data-tooltip="Historias complejas y desarrollo de personajes">
+                            <i class="fas fa-book"></i> Con narrativa profunda
+                            <span class="tooltip">Historias complejas y desarrollo de personajes<br><strong>Ej: The Last of Us, Life is Strange</strong></span>
+                        </div>
+                        <div class="option" data-value="competitivos" data-tooltip="Juegos donde competir contra otros es el foco">
+                            <i class="fas fa-trophy"></i> Competitivos
+                            <span class="tooltip">Juegos donde competir contra otros es el foco<br><strong>Ej: League of Legends, Counter-Strike</strong></span>
+                        </div>
+                        <div class="option" data-value="cooperativos" data-tooltip="Juegos donde colaborar con otros es esencial">
+                            <i class="fas fa-hands-helping"></i> Cooperativos
+                            <span class="tooltip">Juegos donde colaborar con otros es esencial<br><strong>Ej: It Takes Two, Overcooked</strong></span>
+                        </div>
+                        <div class="option" data-value="gráficos realistas" data-tooltip="Juegos con estilo visual realista">
+                            <i class="fas fa-eye"></i> Gráficos realistas
+                            <span class="tooltip">Juegos con estilo visual realista<br><strong>Ej: Cyberpunk 2077, Red Dead Redemption 2</strong></span>
+                        </div>
+                        <div class="option" data-value="estilo artístico" data-tooltip="Juegos con estilos visuales únicos y artísticos">
+                            <i class="fas fa-palette"></i> Estilo artístico
+                            <span class="tooltip">Juegos con estilos visuales únicos y artísticos<br><strong>Ej: Cuphead, Hollow Knight</strong></span>
+                        </div>
+                        <div class="option" data-value="mundo abierto" data-tooltip="Juegos donde puedes explorar libremente">
+                            <i class="fas fa-globe-americas"></i> Mundo abierto
+                            <span class="tooltip">Juegos donde puedes explorar libremente<br><strong>Ej: The Elder Scrolls V: Skyrim, Grand Theft Auto V</strong></span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="question-group">
                     <h2><i class="fas fa-star"></i> 5. ¿Tiene intereses especiales? (Ej: animales, espacio, deportes)</h2>
-                    <input type="text" id="interests" placeholder="Dinosaurios, fútbol, ciencia, arte...">
+                    <input type="text" id="interests" placeholder="Dinosaurios, fútbol, ciencia, arte, historia...">
+                </div>
+                
+                <div class="question-group">
+                    <h2><i class="fas fa-history"></i> 6. ¿Qué juegos ha disfrutado recientemente?</h2>
+                    <textarea id="recent-games" placeholder="Menciona los últimos juegos que has jugado y disfrutado (ej: Minecraft, The Legend of Zelda, Fortnite...)"></textarea>
+                </div>
+                
+                <div class="question-group">
+                    <h2><i class="fas fa-stopwatch"></i> 7. ¿Cuántas horas suele jugar a la semana?</h2>
+                    <select id="playtime">
+                        <option value="">Selecciona una opción</option>
+                        <option value="menos de 5">Menos de 5 horas</option>
+                        <option value="5-10">5-10 horas</option>
+                        <option value="11-15">11-15 horas</option>
+                        <option value="16-20">16-20 horas</option>
+                        <option value="más de 20">Más de 20 horas</option>
+                    </select>
+                </div>
+                
+                <div class="question-group">
+                    <h2><i class="fas fa-user-friends"></i> 8. ¿Cómo prefiere jugar?</h2>
+                    <div class="options-grid" id="playstyle">
+                        <div class="option" data-value="solo" data-tooltip="Prefiero experiencias de un solo jugador">
+                            <i class="fas fa-user"></i> Solo
+                            <span class="tooltip">Prefiero experiencias de un solo jugador<br><strong>Ej: The Witcher, God of War</strong></span>
+                        </div>
+                        <div class="option" data-value="amigos/familia en línea" data-tooltip="Jugar con conocidos a través de internet">
+                            <i class="fas fa-users"></i> Con amigos/familia (en línea)
+                            <span class="tooltip">Jugar con conocidos a través de internet<br><strong>Ej: Fortnite, Among Us</strong></span>
+                        </div>
+                        <div class="option" data-value="amigos/familia local" data-tooltip="Jugar con personas en el mismo espacio físico">
+                            <i class="fas fa-users"></i> Con amigos/familia (local)
+                            <span class="tooltip">Jugar con personas en el mismo espacio físico<br><strong>Ej: Mario Party, Overcooked</strong></span>
+                        </div>
+                        <div class="option" data-value="comunidad en línea" data-tooltip="Jugar con desconocidos en partidas multijugador">
+                            <i class="fas fa-globe"></i> Con comunidad en línea
+                            <span class="tooltip">Jugar con desconocidos en partidas multijugador<br><strong>Ej: World of Warcraft, Call of Duty</strong></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-group">
+                    <h2><i class="fas fa-dollar-sign"></i> 9. ¿Qué presupuesto tiene para nuevos juegos?</h2>
+                    <select id="budget">
+                        <option value="">Selecciona una opción</option>
+                        <option value="gratuitos">Prefiero juegos gratuitos</option>
+                        <option value="menos de 20">Menos de $20</option>
+                        <option value="20-40">$20-$40</option>
+                        <option value="40-60">$40-$60</option>
+                        <option value="sin límite">Sin límite específico</option>
+                    </select>
                 </div>
                 
                 <div class="error" id="error-message">
                     <i class="fas fa-exclamation-circle"></i> Por favor completa todos los campos requeridos
                 </div>
                 
-                <div class="connection-status" id="api-status">
-                    <i class="fas fa-circle"></i> Estado de conexión: <span id="status-text">Verificando...</span>
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i> Este asistente utiliza la API gratuita de OpenRouter para generar recomendaciones personalizadas basadas en tus respuestas.
                 </div>
                 
-                <button id="submit-btn">
-                    <i class="fas fa-robot"></i> Obtener recomendaciones con IA
+                <button id="submit-btn" class="pulse">
+                    <i class="fas fa-robot"></i> GENERAR RECOMENDACIONES CON IA
                 </button>
             </div>
             
             <div id="results">
                 <div class="loader" id="loader"></div>
-                <div class="error-panel" id="error-panel">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Error en la recomendación</h3>
-                    <p id="error-details">No se pudo obtener recomendaciones. Por favor intenta de nuevo.</p>
-                    <button id="retry-btn"><i class="fas fa-redo"></i> Reintentar</button>
-                </div>
                 <div id="recommendations"></div>
+                <div class="error" id="api-error-message" style="display: none;"></div>
                 <button id="restart-btn">
-                    <i class="fas fa-redo"></i> Hacer otra recomendación
+                    <i class="fas fa-redo"></i> REALIZAR OTRA CONSULTA
                 </button>
             </div>
         </div>
         
         <footer>
-            <p><i class="fas fa-code"></i> Asistente de juegos con tecnología DeepSeek AI | © 2023</p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>GAMEMASTER AI</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-info-circle"></i> Acerca de</a>
+                    <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacidad</a>
+                </div>
+                <div class="footer-copyright">
+                    <p><i class="fas fa-code"></i> Sistema de recomendaciones con OpenRouter API | © 2023</p>
+                </div>
+            </div>
         </footer>
     </div>
 
     <script>
-        // Selección de opciones
+        // Actualizar contador de géneros seleccionados
+        function updateGenreCount() {
+            const selected = document.querySelectorAll('#genres .option.selected').length;
+            document.getElementById('selected-count').textContent = selected;
+        }
+        
+        // Selección de opciones con límite de 5 para géneros
         document.querySelectorAll('.option').forEach(option => {
             option.addEventListener('click', function() {
+                // Solo aplica límite para el grupo de géneros
+                if (this.closest('#genres')) {
+                    const selected = this.closest('#genres').querySelectorAll('.option.selected');
+                    if (selected.length >= 5 && !this.classList.contains('selected')) {
+                        alert('Por favor selecciona un máximo de 5 géneros');
+                        return;
+                    }
+                }
                 this.classList.toggle('selected');
+                updateGenreCount();
             });
         });
         
-        // Verificar estado de la API al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusElement = document.getElementById('api-status');
-            const statusText = document.getElementById('status-text');
-            
-            statusElement.style.display = 'block';
-            statusElement.className = 'connection-status';
-            
-            // Simular verificación de API
-            setTimeout(() => {
-                statusElement.classList.add('status-connected');
-                statusText.innerHTML = 'Conectado a DeepSeek AI';
-                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> ' + statusElement.innerHTML;
-            }, 1500);
-        });
+        // Inicializar contador
+        updateGenreCount();
         
-        // Función para interpretar las respuestas con IA
-        async function interpretarConIA() {
+        // Función mejorada para generar recomendaciones con OpenRouter API
+        async function generateRecommendations() {
             // Obtener valores del formulario
             const age = document.getElementById('age').value;
             const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
             const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
             const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
             const interests = document.getElementById('interests').value || 'ninguno en particular';
+            const recentGames = document.getElementById('recent-games').value || 'no ha especificado';
+            const playtime = document.getElementById('playtime').value || 'no especificado';
+            const playstyle = Array.from(document.querySelectorAll('#playstyle .option.selected')).map(el => el.dataset.value).join(', ') || 'no especificado';
+            const budget = document.getElementById('budget').value || 'no especificado';
             
-            // Construir el prompt para la IA
-            const prompt = `Como experto en videojuegos, recomienda 5 juegos para un jugador de ${age} años.
-Plataformas disponibles: ${platforms.join(', ')}.
-Géneros preferidos: ${genres.join(', ')}.
-Preferencias: ${preferences.join(', ')}.
-Intereses especiales: ${interests}.
+            // Validación
+            if (!age || platforms.length === 0 || genres.length === 0 || preferences.length === 0 || !playtime || playstyle === 'no especificado' || !budget) {
+                throw new Error('Por favor completa todos los campos requeridos');
+            }
+            
+            // Crear el prompt mejorado para la IA
+            const prompt = `Como experto en videojuegos, recomienda juegos personalizados considerando estos datos:
 
-La respuesta debe:
-1. Estar en español
-2. Incluir solo juegos apropiados para la edad
-3. Para cada juego: nombre, breve descripción, edad recomendada y plataformas
-4. Explicar por qué es adecuado para este jugador
-5. Formato: "Nombre del juego (Plataformas) - Edad recomendada: ..." seguido de explicación`;
-            
+**Perfil del jugador:**
+- Edad: ${age} años
+- Plataformas disponibles: ${platforms.join(', ')}
+- Géneros favoritos: ${genres.join(', ')}
+- Preferencias de juego: ${preferences.join(', ')}
+- Intereses especiales: ${interests}
+- Juegos disfrutados recientemente: ${recentGames}
+- Tiempo de juego semanal: ${playtime}
+- Estilo de juego preferido: ${playstyle}
+- Presupuesto: ${budget}
+
+**Instrucciones para la respuesta:**
+1. Recomienda AL MENOS UN JUEGO POR CADA GÉNERO SELECCIONADO (${genres.length} géneros)
+2. Puedes recomendar más de 5 juegos en total
+3. Usa este formato para cada juego:
+   [Número]. Nombre del juego (Plataformas disponibles) - Edad recomendada: X años
+   • Descripción: Breve descripción (1-2 frases)
+   • Por qué es adecuado: Explicación específica basada en sus preferencias
+   • Precio aproximado: Indicar si es gratis, económico, medio o premium
+4. Todos los juegos deben ser REALES y EXISTENTES
+5. La respuesta debe estar completamente en español
+6. Considera sus juegos recientes para ofrecer variedad
+7. Adapta las recomendaciones a su presupuesto
+8. No repitas la información del perfil en la respuesta`;
+
+            // Usar OpenRouter API con parámetros optimizados
             try {
-                // Clave API de DeepSeek
-                const API_KEY = 'sk-b287a463015d434eb83bd84cc4bbb038';
-                
-                // Realizar la solicitud a la API de DeepSeek
-                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
+                        'Authorization': 'Bearer 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',
+                        'HTTP-Referer': 'https://gamemaster-ai.com',
+                        'X-Title': 'GameMaster AI',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: "deepseek-chat",
-                        messages: [
-                            {
-                                role: "user",
-                                content: prompt
-                            }
+                        "model": "deepseek/deepseek-r1-0528-qwen3-8b:free",
+                        "messages": [
+                            {"role": "user", "content": prompt}
                         ],
-                        temperature: 0.7,
-                        max_tokens: 2000,
-                        stream: false
+                        "temperature": 0.7,
+                        "max_tokens": 2500
                     })
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`Error de API: ${response.status} ${response.statusText}`);
+                    throw new Error(`Error de API: ${response.status}`);
                 }
                 
                 const data = await response.json();
                 
-                if (!data.choices || data.choices.length === 0) {
-                    throw new Error('La API no devolvió recomendaciones');
+                if (!data || !data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
+                    throw new Error('La IA no pudo generar recomendaciones');
                 }
                 
                 return data.choices[0].message.content;
-                
             } catch (error) {
-                console.error('Error en la solicitud a la API:', error);
-                throw error;
+                console.error('Error con OpenRouter API:', error);
+                throw new Error('No se pudo conectar con el servicio de IA. Por favor intenta de nuevo más tarde.');
             }
         }
         
-        // Función para mostrar recomendaciones
-        function mostrarRecomendaciones(contenido) {
+        // Función mejorada para mostrar recomendaciones
+        function displayRecommendations(content) {
             // Formatear la respuesta para mejor visualización
-            let formattedContent = contenido
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
-                .replace(/\n/g, '<br>') // Saltos de línea
-                .replace(/(\d+\.\s+)([^<]+)/g, '<div class="recommendation-item"><div class="recommendation-title"><i class="fas fa-gamepad"></i> $1$2</div>')
-                .replace(/Explicación:/g, '</div><div class="explanation"><strong>Explicación:</strong>')
+            let formattedContent = content
+                .replace(/\n\s*• Descripción:/g, '</div><div class="game-description"><strong>Descripción:</strong>')
+                .replace(/\n\s*• Por qué es adecuado:/g, '</div><div class="explanation"><strong>Por qué es adecuado:</strong>')
+                .replace(/\n\s*• Precio aproximado:/g, '</div><div class="price-info"><strong>Precio:</strong>')
+                .replace(/(\d+\.)\s([^\n]+)/g, '<div class="recommendation-item"><div class="game-title"><i class="fas fa-gamepad"></i> $1 $2</div>')
+                .replace(/\n/g, '<br>')
                 .replace(/<br><br>/g, '</div>');
+            
+            // Obtener valores del formulario para el resumen
+            const age = document.getElementById('age').options[document.getElementById('age').selectedIndex].text;
+            const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value).join(', ');
+            const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value).join(', ');
+            const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value).join(', ');
+            const interests = document.getElementById('interests').value || 'ninguno';
+            const recentGames = document.getElementById('recent-games').value || 'no especificados';
+            const playtime = document.getElementById('playtime').value || 'no especificado';
+            const playstyle = Array.from(document.querySelectorAll('#playstyle .option.selected')).map(el => el.dataset.value).join(', ') || 'no especificado';
+            const budget = document.getElementById('budget').value || 'no especificado';
             
             // Crear el análisis de la IA
             const analysis = `
-                <div class="analysis-section">
-                    <div class="analysis-header">
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i> ¡IA ha generado ${genres.split(',').length} recomendaciones personalizadas!
+                </div>
+                
+                <div class="ai-recommendation">
+                    <div class="ai-header">
                         <i class="fas fa-brain ai-icon"></i>
                         <div>
-                            <h2>Análisis de la IA</h2>
-                            <p>DeepSeek AI ha interpretado tus respuestas y ha creado estas recomendaciones personalizadas</p>
+                            <h2>Interpretación de tus respuestas</h2>
+                            <p>La IA ha analizado tus preferencias y ha creado estas recomendaciones</p>
                         </div>
                     </div>
                     
-                    <div class="analysis-content">
-                        <p>Basado en tus selecciones, la IA ha considerado:</p>
-                        <ul class="analysis-points">
-                            <li>La edad del jugador: ${document.getElementById('age').options[document.getElementById('age').selectedIndex].text}</li>
-                            <li>Plataformas disponibles: ${Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value).join(', ')}</li>
-                            <li>Géneros preferidos: ${Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value).join(', ')}</li>
-                            <li>Preferencias de juego: ${Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value).join(', ')}</li>
-                            <li>Intereses especiales: ${document.getElementById('interests').value || 'ninguno'}</li>
+                    <div class="ai-content">
+                        <p>Basado en tus selecciones:</p>
+                        <ul>
+                            <li><strong>Edad del jugador:</strong> ${age}</li>
+                            <li><strong>Plataformas:</strong> ${platforms}</li>
+                            <li><strong>Géneros preferidos:</strong> ${genres}</li>
+                            <li><strong>Preferencias:</strong> ${preferences}</li>
+                            <li><strong>Intereses especiales:</strong> ${interests}</li>
+                            <li><strong>Juegos recientes:</strong> ${recentGames}</li>
+                            <li><strong>Horas de juego semanales:</strong> ${playtime}</li>
+                            <li><strong>Estilo de juego:</strong> ${playstyle}</li>
+                            <li><strong>Presupuesto:</strong> ${budget}</li>
                         </ul>
-                        
-                        <div class="response-summary">
-                            <h3>Recomendaciones de juegos</h3>
-                            <p>Estos juegos han sido seleccionados específicamente para satisfacer las preferencias del jugador</p>
-                        </div>
                     </div>
                 </div>
             `;
             
             // Mostrar todo el contenido
             document.getElementById('recommendations').innerHTML = `
-                <div class="success-message">
-                    <i class="fas fa-check-circle"></i> ¡Recomendaciones generadas con éxito!
-                </div>
                 ${analysis}
-                <div class="recommendation">${formattedContent}</div>
+                <div class="ai-recommendation">
+                    <div class="ai-header">
+                        <i class="fas fa-list ai-icon"></i>
+                        <div>
+                            <h2>Recomendaciones de Juegos</h2>
+                            <p>Estos juegos han sido seleccionados específicamente para ti</p>
+                        </div>
+                    </div>
+                    <div class="ai-content">
+                        ${formattedContent}
+                    </div>
+                </div>
             `;
         }
         
@@ -704,8 +1047,11 @@ La respuesta debe:
             const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
             const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
             const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
+            const playtime = document.getElementById('playtime').value;
+            const playstyle = Array.from(document.querySelectorAll('#playstyle .option.selected')).map(el => el.dataset.value);
+            const budget = document.getElementById('budget').value;
             
-            if (!age || platforms.length === 0 || genres.length === 0 || preferences.length === 0) {
+            if (!age || platforms.length === 0 || genres.length === 0 || preferences.length === 0 || !playtime || playstyle.length === 0 || !budget) {
                 document.getElementById('error-message').style.display = 'block';
                 return;
             }
@@ -715,48 +1061,25 @@ La respuesta debe:
             document.getElementById('results').style.display = 'block';
             document.getElementById('loader').style.display = 'block';
             document.getElementById('recommendations').innerHTML = '';
-            document.getElementById('error-panel').style.display = 'none';
+            document.getElementById('api-error-message').style.display = 'none';
             
             try {
-                // Obtener recomendaciones de la IA
-                const recomendaciones = await interpretarConIA();
+                // Generar recomendaciones con IA gratuita
+                const recommendations = await generateRecommendations();
                 
                 // Ocultar loader y mostrar resultados
                 document.getElementById('loader').style.display = 'none';
-                mostrarRecomendaciones(recomendaciones);
+                displayRecommendations(recommendations);
                 
             } catch (error) {
                 console.error('Error al obtener recomendaciones:', error);
                 
-                // Mostrar panel de error
+                // Ocultar loader y mostrar mensaje de error
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('error-panel').style.display = 'block';
-                document.getElementById('error-details').textContent = error.message || 'Error desconocido al conectar con la API';
-                
-                // Actualizar estado de conexión
-                const statusElement = document.getElementById('api-status');
-                statusElement.className = 'connection-status status-error';
-                statusElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error de conexión con la API';
+                const errorMessage = document.getElementById('api-error-message');
+                errorMessage.textContent = error.message || 'Ocurrió un error al generar las recomendaciones. Por favor intenta de nuevo.';
+                errorMessage.style.display = 'block';
             }
-        });
-        
-        // Botón para reintentar
-        document.getElementById('retry-btn').addEventListener('click', function() {
-            document.getElementById('error-panel').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
-            
-            // Reintentar la solicitud
-            setTimeout(async () => {
-                try {
-                    const recomendaciones = await interpretarConIA();
-                    document.getElementById('loader').style.display = 'none';
-                    mostrarRecomendaciones(recomendaciones);
-                } catch (error) {
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('error-panel').style.display = 'block';
-                    document.getElementById('error-details').textContent = error.message || 'Error al reintentar la conexión';
-                }
-            }, 1000);
         });
         
         // Botón para reiniciar
@@ -770,6 +1093,11 @@ La respuesta debe:
             });
             document.getElementById('age').value = '';
             document.getElementById('interests').value = '';
+            document.getElementById('recent-games').value = '';
+            document.getElementById('playtime').value = '';
+            document.getElementById('budget').value = '';
+            document.getElementById('api-error-message').style.display = 'none';
+            updateGenreCount();
         });
     </script>
 </body>
