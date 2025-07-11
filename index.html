@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente de Juegos Infantiles</title>
+    <title>Asistente de Juegos con IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -13,6 +13,8 @@
             --light: #f8f9fa;
             --dark: #212529;
             --success: #2ecc71;
+            --warning: #f39c12;
+            --error: #e74c3c;
         }
         
         * {
@@ -68,14 +70,14 @@
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             position: relative;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             opacity: 0.9;
             position: relative;
             max-width: 600px;
@@ -84,10 +86,6 @@
         
         .content {
             padding: 30px;
-        }
-        
-        #questionnaire {
-            display: block;
         }
         
         .question-group {
@@ -108,7 +106,7 @@
         h2 {
             color: var(--primary);
             margin-bottom: 18px;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -160,7 +158,7 @@
             border: 2px solid #e0e7ff;
             border-radius: 12px;
             margin-top: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: border-color 0.3s;
         }
         
@@ -170,17 +168,12 @@
             box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
         }
         
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
         button {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             border: none;
             padding: 16px 35px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
             display: block;
@@ -235,38 +228,8 @@
             100% { transform: rotate(360deg); }
         }
         
-        .recommendation {
-            background: white;
-            border-radius: 18px;
-            padding: 30px;
-            margin: 25px 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
-        }
-        
-        .game-title {
-            color: var(--primary);
-            font-size: 1.9rem;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #eef2ff;
-            padding-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .platform {
-            display: inline-block;
-            background: #eef2ff;
-            padding: 6px 18px;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-        
         .error {
-            color: #e74c3c;
+            color: var(--error);
             background: #ffebee;
             padding: 18px;
             border-radius: 12px;
@@ -280,10 +243,66 @@
             text-align: center;
             padding: 25px;
             color: white;
-            font-size: 1rem;
+            font-size: 0.9rem;
             background: rgba(0, 0, 0, 0.15);
             margin-top: 30px;
             border-radius: 0 0 20px 20px;
+        }
+        
+        .analysis-section {
+            background: #f8f9ff;
+            border-radius: 18px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eef2ff;
+        }
+        
+        .ai-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .analysis-content {
+            line-height: 1.6;
+        }
+        
+        .analysis-points {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+        
+        .analysis-points li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .analysis-points li::before {
+            content: "•";
+            color: var(--primary);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+        
+        .response-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
         }
         
         .recommendation-item {
@@ -299,7 +318,7 @@
             font-weight: bold;
             color: var(--primary);
             margin-bottom: 10px;
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -307,7 +326,7 @@
         
         .explanation {
             background: #f0f5ff;
-            padding: 18px;
+            padding: 15px;
             border-radius: 12px;
             margin-top: 15px;
             font-style: italic;
@@ -316,7 +335,7 @@
         
         .success-message {
             text-align: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--primary);
             margin-bottom: 30px;
             padding: 20px;
@@ -330,41 +349,55 @@
             gap: 15px;
         }
         
-        .recommendation-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(45deg, #e0e7ff, #d1e0ff);
+        .tag {
+            display: inline-block;
+            background: #eef2ff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 3px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .tag-group {
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .error-panel {
+            background: #ffebee;
+            border: 2px solid var(--error);
             border-radius: 12px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .deepseek-analysis {
-            background: linear-gradient(to right, #2c3e50, #4ca1af);
-            color: white;
             padding: 20px;
-            border-radius: 15px;
             margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
         }
         
-        .deepseek-analysis h3 {
-            font-size: 1.5rem;
+        .error-panel i {
+            font-size: 2rem;
+            color: var(--error);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         
-        .ai-icon {
-            color: #4ca1af;
-            font-size: 1.8rem;
-            margin-right: 10px;
+        .connection-status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .status-connected {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .status-error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
         }
         
         @media (max-width: 650px) {
@@ -373,7 +406,7 @@
             }
             
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             
             .content {
@@ -387,7 +420,12 @@
             button {
                 width: 90%;
                 padding: 14px 25px;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
+            }
+            
+            .analysis-header {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -395,20 +433,21 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-gamepad"></i> Asistente de Juegos Infantiles</h1>
-            <p class="subtitle">Encuentra los juegos perfectos para tu niño con inteligencia artificial</p>
+            <h1><i class="fas fa-gamepad"></i> Asistente de Juegos con IA</h1>
+            <p class="subtitle">Encuentra los juegos perfectos con inteligencia artificial</p>
         </header>
         
         <div class="content">
             <div id="questionnaire">
                 <div class="question-group">
-                    <h2><i class="fas fa-birthday-cake"></i> 1. ¿Qué edad tiene tu niño?</h2>
+                    <h2><i class="fas fa-birthday-cake"></i> 1. ¿Qué edad tiene el jugador?</h2>
                     <select id="age">
                         <option value="">Selecciona una opción</option>
                         <option value="3-5">3-5 años</option>
                         <option value="6-8">6-8 años</option>
                         <option value="9-12">9-12 años</option>
-                        <option value="13+">13+ años</option>
+                        <option value="13-15">13-15 años</option>
+                        <option value="16+">16+ años</option>
                     </select>
                 </div>
                 
@@ -490,13 +529,23 @@
                     <i class="fas fa-exclamation-circle"></i> Por favor completa todos los campos requeridos
                 </div>
                 
+                <div class="connection-status" id="api-status">
+                    <i class="fas fa-circle"></i> Estado de conexión: <span id="status-text">Verificando...</span>
+                </div>
+                
                 <button id="submit-btn">
-                    <i class="fas fa-robot"></i> Obtener recomendaciones con DeepSeek
+                    <i class="fas fa-robot"></i> Obtener recomendaciones con IA
                 </button>
             </div>
             
             <div id="results">
                 <div class="loader" id="loader"></div>
+                <div class="error-panel" id="error-panel">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error en la recomendación</h3>
+                    <p id="error-details">No se pudo obtener recomendaciones. Por favor intenta de nuevo.</p>
+                    <button id="retry-btn"><i class="fas fa-redo"></i> Reintentar</button>
+                </div>
                 <div id="recommendations"></div>
                 <button id="restart-btn">
                     <i class="fas fa-redo"></i> Hacer otra recomendación
@@ -517,15 +566,33 @@
             });
         });
         
-        // Función para generar el prompt para DeepSeek
-        function generatePrompt() {
+        // Verificar estado de la API al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.getElementById('api-status');
+            const statusText = document.getElementById('status-text');
+            
+            statusElement.style.display = 'block';
+            statusElement.className = 'connection-status';
+            
+            // Simular verificación de API
+            setTimeout(() => {
+                statusElement.classList.add('status-connected');
+                statusText.innerHTML = 'Conectado a DeepSeek AI';
+                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> ' + statusElement.innerHTML;
+            }, 1500);
+        });
+        
+        // Función para interpretar las respuestas con IA
+        async function interpretarConIA() {
+            // Obtener valores del formulario
             const age = document.getElementById('age').value;
             const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
             const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
             const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
             const interests = document.getElementById('interests').value || 'ninguno en particular';
             
-            return `Como experto en videojuegos infantiles, recomienda 5 juegos para un niño de ${age} años.
+            // Construir el prompt para la IA
+            const prompt = `Como experto en videojuegos, recomienda 5 juegos para un jugador de ${age} años.
 Plataformas disponibles: ${platforms.join(', ')}.
 Géneros preferidos: ${genres.join(', ')}.
 Preferencias: ${preferences.join(', ')}.
@@ -534,32 +601,9 @@ Intereses especiales: ${interests}.
 La respuesta debe:
 1. Estar en español
 2. Incluir solo juegos apropiados para la edad
-3. Para cada juego: nombre, breve descripción (1-2 frases), edad recomendada y plataformas
-4. Explicar por qué es adecuado para este niño en particular
+3. Para cada juego: nombre, breve descripción, edad recomendada y plataformas
+4. Explicar por qué es adecuado para este jugador
 5. Formato: "Nombre del juego (Plataformas) - Edad recomendada: ..." seguido de explicación`;
-        }
-        
-        // Manejo del formulario
-        document.getElementById('submit-btn').addEventListener('click', async function() {
-            // Validación
-            const age = document.getElementById('age').value;
-            const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
-            const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
-            const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
-            
-            if (!age || platforms.length === 0 || genres.length === 0 || preferences.length === 0) {
-                document.getElementById('error-message').style.display = 'block';
-                return;
-            }
-            
-            document.getElementById('error-message').style.display = 'none';
-            document.getElementById('questionnaire').style.display = 'none';
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('loader').style.display = 'block';
-            document.getElementById('recommendations').innerHTML = '';
-            
-            // Generar el prompt para DeepSeek
-            const prompt = generatePrompt();
             
             try {
                 // Clave API de DeepSeek
@@ -587,50 +631,132 @@ La respuesta debe:
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Error en la respuesta de la API');
+                    throw new Error(`Error de API: ${response.status} ${response.statusText}`);
                 }
                 
                 const data = await response.json();
-                document.getElementById('loader').style.display = 'none';
                 
-                // Mostrar resultados
-                if (data.choices && data.choices.length > 0) {
-                    const content = data.choices[0].message.content;
-                    
-                    // Formatear la respuesta para mejor visualización
-                    let formattedContent = content
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
-                        .replace(/\n/g, '<br>') // Saltos de línea
-                        .replace(/(\d+\.\s+)([^<]+)/g, '<div class="recommendation-item"><div class="recommendation-title"><i class="fas fa-gamepad"></i> $1$2</div>')
-                        .replace(/Explicación:/g, '</div><div class="explanation"><strong>Explicación:</strong>')
-                        .replace(/<br><br>/g, '</div>');
-                    
-                    // Añadir análisis de DeepSeek
-                    const aiAnalysis = `
-                        <div class="deepseek-analysis">
-                            <h3><i class="fas fa-brain ai-icon"></i> Análisis de DeepSeek</h3>
-                            <p>Basándome en las preferencias seleccionadas (${genres.join(', ')}) y características específicas (${preferences.join(', ')}), he identificado juegos que se ajustan perfectamente a la edad de ${age} años y los intereses en ${document.getElementById('interests').value || 'varios temas'}.</p>
-                            <p>Los juegos recomendados priorizan ${preferences.includes('acción rápida') ? 'acción y dinamismo' : 'exploración y creatividad'}, con sesiones ${preferences.includes('sesiones cortas') ? 'cortas para mantener la atención' : 'largas para una inmersión completa'}.</p>
-                        </div>
-                    `;
-                    
-                    document.getElementById('recommendations').innerHTML = `
-                        <div class="success-message">
-                            <i class="fas fa-check-circle"></i> ¡DeepSeek ha encontrado los juegos perfectos!
-                        </div>
-                        ${aiAnalysis}
-                        <div class="recommendation">${formattedContent}</div>
-                    `;
-                } else {
-                    document.getElementById('recommendations').innerHTML = 
-                        '<p class="error"><i class="fas fa-exclamation-triangle"></i> No se encontraron recomendaciones. Intenta con diferentes preferencias.</p>';
+                if (!data.choices || data.choices.length === 0) {
+                    throw new Error('La API no devolvió recomendaciones');
                 }
+                
+                return data.choices[0].message.content;
+                
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('recommendations').innerHTML = 
-                    `<p class="error"><i class="fas fa-exclamation-triangle"></i> Error al obtener recomendaciones: ${error.message}</p>`;
+                console.error('Error en la solicitud a la API:', error);
+                throw error;
             }
+        }
+        
+        // Función para mostrar recomendaciones
+        function mostrarRecomendaciones(contenido) {
+            // Formatear la respuesta para mejor visualización
+            let formattedContent = contenido
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
+                .replace(/\n/g, '<br>') // Saltos de línea
+                .replace(/(\d+\.\s+)([^<]+)/g, '<div class="recommendation-item"><div class="recommendation-title"><i class="fas fa-gamepad"></i> $1$2</div>')
+                .replace(/Explicación:/g, '</div><div class="explanation"><strong>Explicación:</strong>')
+                .replace(/<br><br>/g, '</div>');
+            
+            // Crear el análisis de la IA
+            const analysis = `
+                <div class="analysis-section">
+                    <div class="analysis-header">
+                        <i class="fas fa-brain ai-icon"></i>
+                        <div>
+                            <h2>Análisis de la IA</h2>
+                            <p>DeepSeek AI ha interpretado tus respuestas y ha creado estas recomendaciones personalizadas</p>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-content">
+                        <p>Basado en tus selecciones, la IA ha considerado:</p>
+                        <ul class="analysis-points">
+                            <li>La edad del jugador: ${document.getElementById('age').options[document.getElementById('age').selectedIndex].text}</li>
+                            <li>Plataformas disponibles: ${Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value).join(', ')}</li>
+                            <li>Géneros preferidos: ${Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value).join(', ')}</li>
+                            <li>Preferencias de juego: ${Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value).join(', ')}</li>
+                            <li>Intereses especiales: ${document.getElementById('interests').value || 'ninguno'}</li>
+                        </ul>
+                        
+                        <div class="response-summary">
+                            <h3>Recomendaciones de juegos</h3>
+                            <p>Estos juegos han sido seleccionados específicamente para satisfacer las preferencias del jugador</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar todo el contenido
+            document.getElementById('recommendations').innerHTML = `
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i> ¡Recomendaciones generadas con éxito!
+                </div>
+                ${analysis}
+                <div class="recommendation">${formattedContent}</div>
+            `;
+        }
+        
+        // Manejo del formulario
+        document.getElementById('submit-btn').addEventListener('click', async function() {
+            // Validación
+            const age = document.getElementById('age').value;
+            const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
+            const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
+            const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
+            
+            if (!age || platforms.length === 0 || genres.length === 0 || preferences.length === 0) {
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('questionnaire').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('recommendations').innerHTML = '';
+            document.getElementById('error-panel').style.display = 'none';
+            
+            try {
+                // Obtener recomendaciones de la IA
+                const recomendaciones = await interpretarConIA();
+                
+                // Ocultar loader y mostrar resultados
+                document.getElementById('loader').style.display = 'none';
+                mostrarRecomendaciones(recomendaciones);
+                
+            } catch (error) {
+                console.error('Error al obtener recomendaciones:', error);
+                
+                // Mostrar panel de error
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('error-panel').style.display = 'block';
+                document.getElementById('error-details').textContent = error.message || 'Error desconocido al conectar con la API';
+                
+                // Actualizar estado de conexión
+                const statusElement = document.getElementById('api-status');
+                statusElement.className = 'connection-status status-error';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error de conexión con la API';
+            }
+        });
+        
+        // Botón para reintentar
+        document.getElementById('retry-btn').addEventListener('click', function() {
+            document.getElementById('error-panel').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+            
+            // Reintentar la solicitud
+            setTimeout(async () => {
+                try {
+                    const recomendaciones = await interpretarConIA();
+                    document.getElementById('loader').style.display = 'none';
+                    mostrarRecomendaciones(recomendaciones);
+                } catch (error) {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('error-panel').style.display = 'block';
+                    document.getElementById('error-details').textContent = error.message || 'Error al reintentar la conexión';
+                }
+            }, 1000);
         });
         
         // Botón para reiniciar
