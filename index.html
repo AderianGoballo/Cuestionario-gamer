@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente de Juegos para Niños</title>
+    <title>Asistente de Juegos Infantiles</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4e54c8;
-            --secondary: #8f94fb;
+            --primary: #6a11cb;
+            --secondary: #2575fc;
             --accent: #ff6b6b;
             --light: #f8f9fa;
             --dark: #212529;
+            --success: #2ecc71;
         }
         
         * {
@@ -25,33 +27,59 @@
             color: var(--dark);
             min-height: 100vh;
             padding: 20px;
-            background-image: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background-image: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background-attachment: fixed;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.97);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
             overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         header {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
-            padding: 30px 20px;
+            padding: 35px 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,100 L0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.9;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .content {
@@ -64,56 +92,86 @@
         
         .question-group {
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             background-color: #f0f5ff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e7ff;
+            transition: transform 0.3s ease;
+        }
+        
+        .question-group:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
         
         h2 {
             color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            margin-bottom: 18px;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            color: var(--secondary);
         }
         
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
+            gap: 15px;
         }
         
         .option {
             background: white;
             border: 2px solid #e0e7ff;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .option:hover {
             transform: translateY(-3px);
             border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
         }
         
         .option.selected {
             background-color: #eef2ff;
             border-color: var(--primary);
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(106, 17, 203, 0.2);
+        }
+        
+        .option i {
+            font-size: 1.4rem;
+            color: var(--primary);
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px solid #e0e7ff;
-            border-radius: 10px;
-            margin-top: 8px;
-            font-size: 1rem;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
         }
         
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
         
@@ -121,22 +179,40 @@
             background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 16px 35px;
+            font-size: 1.3rem;
             border-radius: 50px;
             cursor: pointer;
             display: block;
-            margin: 30px auto;
-            width: 80%;
-            max-width: 300px;
+            margin: 35px auto;
+            width: 85%;
+            max-width: 320px;
             transition: all 0.3s ease;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(25deg);
+            transition: all 0.8s;
         }
         
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+        
+        button:hover::after {
+            left: 120%;
         }
         
         #results {
@@ -148,10 +224,10 @@
             border: 5px solid #f3f3f3;
             border-top: 5px solid var(--primary);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 30px auto;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.2s linear infinite;
+            margin: 40px auto;
         }
         
         @keyframes spin {
@@ -161,90 +237,157 @@
         
         .recommendation {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
         }
         
         .game-title {
             color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.9rem;
+            margin-bottom: 15px;
             border-bottom: 2px solid #eef2ff;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .platform {
             display: inline-block;
             background: #eef2ff;
-            padding: 5px 15px;
+            padding: 6px 18px;
             border-radius: 20px;
             margin: 5px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
         
         .error {
             color: #e74c3c;
             background: #ffebee;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
+            padding: 18px;
+            border-radius: 12px;
+            margin: 25px 0;
             text-align: center;
             display: none;
+            font-weight: 500;
         }
         
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.15);
+            margin-top: 30px;
+            border-radius: 0 0 20px 20px;
         }
         
         .recommendation-item {
             background: #f8f9ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 4px solid var(--primary);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
         }
         
         .recommendation-title {
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 8px;
-            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .explanation {
             background: #f0f5ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 15px;
             font-style: italic;
+            border-left: 3px solid var(--secondary);
         }
         
         .success-message {
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             color: var(--primary);
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
             background: #e8f4f8;
-            border-radius: 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         
-        @media (max-width: 600px) {
+        .recommendation-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #e0e7ff, #d1e0ff);
+            border-radius: 12px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .deepseek-analysis {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .deepseek-analysis h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ai-icon {
+            color: #4ca1af;
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 650px) {
             .options-grid {
                 grid-template-columns: 1fr;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .content {
-                padding: 15px;
+                padding: 20px 15px;
+            }
+            
+            .question-group {
+                padding: 20px;
+            }
+            
+            button {
+                width: 90%;
+                padding: 14px 25px;
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -252,14 +395,14 @@
 <body>
     <div class="container">
         <header>
-            <h1>🎮 Asistente de Juegos Infantiles</h1>
-            <p class="subtitle">Encuentra los juegos perfectos para tu niño</p>
+            <h1><i class="fas fa-gamepad"></i> Asistente de Juegos Infantiles</h1>
+            <p class="subtitle">Encuentra los juegos perfectos para tu niño con inteligencia artificial</p>
         </header>
         
         <div class="content">
             <div id="questionnaire">
                 <div class="question-group">
-                    <h2>1. ¿Qué edad tiene tu niño?</h2>
+                    <h2><i class="fas fa-birthday-cake"></i> 1. ¿Qué edad tiene tu niño?</h2>
                     <select id="age">
                         <option value="">Selecciona una opción</option>
                         <option value="3-5">3-5 años</option>
@@ -270,70 +413,131 @@
                 </div>
                 
                 <div class="question-group">
-                    <h2>2. ¿Qué plataformas tiene disponibles?</h2>
+                    <h2><i class="fas fa-laptop"></i> 2. ¿Qué plataformas tiene disponibles?</h2>
                     <div class="options-grid" id="platforms">
-                        <div class="option" data-value="Nintendo Switch">Nintendo Switch</div>
-                        <div class="option" data-value="PlayStation">PlayStation</div>
-                        <div class="option" data-value="Xbox">Xbox</div>
-                        <div class="option" data-value="PC">PC</div>
-                        <div class="option" data-value="Móvil/Tablet">Móvil/Tablet</div>
+                        <div class="option" data-value="Nintendo Switch">
+                            <i class="fab fa-nintendo-switch"></i> Nintendo Switch
+                        </div>
+                        <div class="option" data-value="PlayStation">
+                            <i class="fab fa-playstation"></i> PlayStation
+                        </div>
+                        <div class="option" data-value="Xbox">
+                            <i class="fab fa-xbox"></i> Xbox
+                        </div>
+                        <div class="option" data-value="PC">
+                            <i class="fas fa-desktop"></i> PC
+                        </div>
+                        <div class="option" data-value="Móvil/Tablet">
+                            <i class="fas fa-mobile-alt"></i> Móvil/Tablet
+                        </div>
                     </div>
                 </div>
                 
                 <div class="question-group">
-                    <h2>3. ¿Qué tipo de juegos le gustan?</h2>
+                    <h2><i class="fas fa-chess"></i> 3. ¿Qué tipo de juegos le gustan?</h2>
                     <div class="options-grid" id="genres">
-                        <div class="option" data-value="Aventura">Aventura</div>
-                        <div class="option" data-value="Plataformas">Plataformas</div>
-                        <div class="option" data-value="Carreras">Carreras</div>
-                        <div class="option" data-value="Deportes">Deportes</div>
-                        <div class="option" data-value="Construcción">Construcción</div>
-                        <div class="option" data-value="Puzzles">Puzzles</div>
-                        <div class="option" data-value="Acción">Acción</div>
-                        <div class="option" data-value="Multijugador">Multijugador</div>
+                        <div class="option" data-value="Aventura">
+                            <i class="fas fa-map"></i> Aventura
+                        </div>
+                        <div class="option" data-value="Plataformas">
+                            <i class="fas fa-running"></i> Plataformas
+                        </div>
+                        <div class="option" data-value="Carreras">
+                            <i class="fas fa-car"></i> Carreras
+                        </div>
+                        <div class="option" data-value="Deportes">
+                            <i class="fas fa-football-ball"></i> Deportes
+                        </div>
+                        <div class="option" data-value="Construcción">
+                            <i class="fas fa-cubes"></i> Construcción
+                        </div>
+                        <div class="option" data-value="Puzzles">
+                            <i class="fas fa-puzzle-piece"></i> Puzzles
+                        </div>
+                        <div class="option" data-value="Acción">
+                            <i class="fas fa-fist-raised"></i> Acción
+                        </div>
+                        <div class="option" data-value="Multijugador">
+                            <i class="fas fa-users"></i> Multijugador
+                        </div>
                     </div>
                 </div>
                 
                 <div class="question-group">
-                    <h2>4. ¿Prefiere juegos...?</h2>
+                    <h2><i class="fas fa-heart"></i> 4. ¿Prefiere juegos...?</h2>
                     <div class="options-grid" id="preferences">
-                        <div class="option" data-value="acción rápida">De acción rápida</div>
-                        <div class="option" data-value="tranquilos/exploración">Tranquilos/Exploración</div>
-                        <div class="option" data-value="sesiones cortas">Sesiones cortas</div>
-                        <div class="option" data-value="sesiones largas">Sesiones largas</div>
+                        <div class="option" data-value="acción rápida">
+                            <i class="fas fa-bolt"></i> De acción rápida
+                        </div>
+                        <div class="option" data-value="tranquilos/exploración">
+                            <i class="fas fa-spa"></i> Tranquilos/Exploración
+                        </div>
+                        <div class="option" data-value="sesiones cortas">
+                            <i class="fas fa-hourglass-half"></i> Sesiones cortas
+                        </div>
+                        <div class="option" data-value="sesiones largas">
+                            <i class="fas fa-hourglass-end"></i> Sesiones largas
+                        </div>
                     </div>
                 </div>
                 
                 <div class="question-group">
-                    <h2>5. ¿Tiene intereses especiales? (Ej: animales, espacio, deportes)</h2>
-                    <input type="text" id="interests" placeholder="Dinosaurios, fútbol, ciencia...">
+                    <h2><i class="fas fa-star"></i> 5. ¿Tiene intereses especiales? (Ej: animales, espacio, deportes)</h2>
+                    <input type="text" id="interests" placeholder="Dinosaurios, fútbol, ciencia, arte...">
                 </div>
                 
-                <div class="error" id="error-message">Por favor completa todos los campos requeridos</div>
+                <div class="error" id="error-message">
+                    <i class="fas fa-exclamation-circle"></i> Por favor completa todos los campos requeridos
+                </div>
                 
-                <button id="submit-btn">Obtener recomendaciones</button>
+                <button id="submit-btn">
+                    <i class="fas fa-robot"></i> Obtener recomendaciones con DeepSeek
+                </button>
             </div>
             
             <div id="results">
                 <div class="loader" id="loader"></div>
                 <div id="recommendations"></div>
-                <button id="restart-btn">Hacer otra recomendación</button>
+                <button id="restart-btn">
+                    <i class="fas fa-redo"></i> Hacer otra recomendación
+                </button>
             </div>
         </div>
+        
+        <footer>
+            <p><i class="fas fa-code"></i> Asistente de juegos con tecnología DeepSeek AI | © 2023</p>
+        </footer>
     </div>
-    
-    <footer>
-        <p>Asistente de juegos con tecnología DeepSeek AI | © 2023</p>
-    </footer>
 
     <script>
         // Selección de opciones
         document.querySelectorAll('.option').forEach(option => {
             option.addEventListener('click', function() {
-                // Permite selección múltiple
                 this.classList.toggle('selected');
             });
         });
+        
+        // Función para generar el prompt para DeepSeek
+        function generatePrompt() {
+            const age = document.getElementById('age').value;
+            const platforms = Array.from(document.querySelectorAll('#platforms .option.selected')).map(el => el.dataset.value);
+            const genres = Array.from(document.querySelectorAll('#genres .option.selected')).map(el => el.dataset.value);
+            const preferences = Array.from(document.querySelectorAll('#preferences .option.selected')).map(el => el.dataset.value);
+            const interests = document.getElementById('interests').value || 'ninguno en particular';
+            
+            return `Como experto en videojuegos infantiles, recomienda 5 juegos para un niño de ${age} años.
+Plataformas disponibles: ${platforms.join(', ')}.
+Géneros preferidos: ${genres.join(', ')}.
+Preferencias: ${preferences.join(', ')}.
+Intereses especiales: ${interests}.
+
+La respuesta debe:
+1. Estar en español
+2. Incluir solo juegos apropiados para la edad
+3. Para cada juego: nombre, breve descripción (1-2 frases), edad recomendada y plataformas
+4. Explicar por qué es adecuado para este niño en particular
+5. Formato: "Nombre del juego (Plataformas) - Edad recomendada: ..." seguido de explicación`;
+        }
         
         // Manejo del formulario
         document.getElementById('submit-btn').addEventListener('click', async function() {
@@ -354,24 +558,14 @@
             document.getElementById('loader').style.display = 'block';
             document.getElementById('recommendations').innerHTML = '';
             
-            // Construir prompt para DeepSeek
-            const interests = document.getElementById('interests').value || 'ninguno en particular';
-            
-            const prompt = `Como experto en videojuegos infantiles, recomienda 5 juegos para un niño de ${age} años.
-Plataformas disponibles: ${platforms.join(', ')}.
-Géneros preferidos: ${genres.join(', ')}.
-Preferencias: ${preferences.join(', ')}.
-Intereses especiales: ${interests}.
-
-La respuesta debe:
-1. Estar en español
-2. Incluir solo juegos apropiados para la edad
-3. Para cada juego: nombre, breve descripción (1-2 frases), edad recomendada y plataformas
-4. Explicar por qué es adecuado para este niño en particular
-5. Formato: "Nombre del juego (Plataformas) - Edad recomendada: ..." seguido de explicación`;
+            // Generar el prompt para DeepSeek
+            const prompt = generatePrompt();
             
             try {
+                // Clave API de DeepSeek
                 const API_KEY = 'sk-b287a463015d434eb83bd84cc4bbb038';
+                
+                // Realizar la solicitud a la API de DeepSeek
                 const response = await fetch('https://api.deepseek.com/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -380,7 +574,12 @@ La respuesta debe:
                     },
                     body: JSON.stringify({
                         model: "deepseek-chat",
-                        messages: [{ role: "user", content: prompt }],
+                        messages: [
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ],
                         temperature: 0.7,
                         max_tokens: 2000,
                         stream: false
@@ -388,8 +587,7 @@ La respuesta debe:
                 });
                 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Error de API: ${errorData.error?.message || response.status}`);
+                    throw new Error('Error en la respuesta de la API');
                 }
                 
                 const data = await response.json();
@@ -403,23 +601,35 @@ La respuesta debe:
                     let formattedContent = content
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
                         .replace(/\n/g, '<br>') // Saltos de línea
-                        .replace(/(\d+\.\s+)([^<]+)/g, '<div class="recommendation-item"><div class="recommendation-title">$1$2</div>')
+                        .replace(/(\d+\.\s+)([^<]+)/g, '<div class="recommendation-item"><div class="recommendation-title"><i class="fas fa-gamepad"></i> $1$2</div>')
                         .replace(/Explicación:/g, '</div><div class="explanation"><strong>Explicación:</strong>')
                         .replace(/<br><br>/g, '</div>');
                     
+                    // Añadir análisis de DeepSeek
+                    const aiAnalysis = `
+                        <div class="deepseek-analysis">
+                            <h3><i class="fas fa-brain ai-icon"></i> Análisis de DeepSeek</h3>
+                            <p>Basándome en las preferencias seleccionadas (${genres.join(', ')}) y características específicas (${preferences.join(', ')}), he identificado juegos que se ajustan perfectamente a la edad de ${age} años y los intereses en ${document.getElementById('interests').value || 'varios temas'}.</p>
+                            <p>Los juegos recomendados priorizan ${preferences.includes('acción rápida') ? 'acción y dinamismo' : 'exploración y creatividad'}, con sesiones ${preferences.includes('sesiones cortas') ? 'cortas para mantener la atención' : 'largas para una inmersión completa'}.</p>
+                        </div>
+                    `;
+                    
                     document.getElementById('recommendations').innerHTML = `
-                        <div class="success-message">🎉 ¡Hemos encontrado los juegos perfectos!</div>
+                        <div class="success-message">
+                            <i class="fas fa-check-circle"></i> ¡DeepSeek ha encontrado los juegos perfectos!
+                        </div>
+                        ${aiAnalysis}
                         <div class="recommendation">${formattedContent}</div>
                     `;
                 } else {
                     document.getElementById('recommendations').innerHTML = 
-                        '<p class="error">No se encontraron recomendaciones. Intenta con diferentes preferencias.</p>';
+                        '<p class="error"><i class="fas fa-exclamation-triangle"></i> No se encontraron recomendaciones. Intenta con diferentes preferencias.</p>';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('recommendations').innerHTML = 
-                    `<p class="error">Error al obtener recomendaciones: ${error.message}</p>`;
+                    `<p class="error"><i class="fas fa-exclamation-triangle"></i> Error al obtener recomendaciones: ${error.message}</p>`;
             }
         });
         
