@@ -884,8 +884,9 @@
 
     <script>
         // Configuración de OpenRouter API
-        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_KEY = "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";
         const OPENROUTER_MODEL = "deepseek/deepseek-r1-0528-qwen3-8b:free";
+        const OPENROUTER_ALT_MODEL = "mistralai/mistral-7b-instruct:free";
         const SITE_URL = window.location.href;
         const SITE_NAME = "GameMaster AI";
         
@@ -914,6 +915,34 @@
         // Inicializar contador
         updateGenreCount();
         
+        // Verificar estado de la API
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/models', {
+                    headers: { 'Authorization': `Bearer ${OPENROUTER_API_KEY}` }
+                });
+                return response.ok;
+            } catch {
+                return false;
+            }
+        }
+        
+        // Actualizar estado de la API en la UI
+        async function updateAPIStatus() {
+            const apiStatus = document.getElementById('api-status');
+            const isOnline = await checkAPIStatus();
+            
+            apiStatus.className = `api-status ${isOnline ? 'online' : 'offline'}`;
+            apiStatus.innerHTML = `<i class="fas fa-circle"></i> ${
+                isOnline 
+                    ? 'API operativa' 
+                    : 'API no disponible - intentando conectar...'
+            }`;
+        }
+        
+        // Llamar al cargar la página
+        document.addEventListener('DOMContentLoaded', updateAPIStatus);
+        
         // Función para generar recomendaciones con OpenRouter API
         async function generateRecommendations() {
             // Obtener valores del formulario
@@ -933,75 +962,86 @@
             }
             
             // Crear el prompt para la IA
-            const prompt = `Como experto en videojuegos, recomienda EXACTAMENTE 5 juegos personalizados considerando estos datos:
+            const prompt = `[Instrucciones estrictas]
+Como EXPERTO en videojuegos, genera EXACTAMENTE 5 recomendaciones usando este formato:
 
-**Perfil del jugador:**
-- Edad: ${age} años
-- Plataformas disponibles: ${platforms.join(', ')}
-- Géneros favoritos: ${genres.join(', ')}
-- Preferencias de juego: ${preferences.join(', ')}
-- Intereses especiales: ${interests}
-- Juegos disfrutados recientemente: ${recentGames}
-- Tiempo de juego semanal: ${playtime}
-- Estilo de juego preferido: ${playstyle}
+1. [Nombre] ([Plataformas]) - Edad: [X]+
+   • Descripción: [1-2 frases]
+   • Adecuado porque: [Relacionar con preferencias]
+   • Precio: [Gratis/<$20/$20-40/$40-60/Premium]
+
+Datos del jugador:
+- Edad: ${age}
+- Plataformas: ${platforms.join(', ')}
+- Géneros: ${genres.join(', ')}
+- Preferencias: ${preferences.join(', ')}
+- Intereses: ${interests}
+- Juegos recientes: ${recentGames}
+- Tiempo juego: ${playtime}
+- Estilo: ${playstyle}
 - Presupuesto: ${budget}
 
-**Instrucciones para la respuesta:**
-1. Proporciona EXACTAMENTE 5 recomendaciones de juegos REALES Y EXISTENTES
-2. Recomienda al menos un juego por cada género seleccionado (${genres.length} géneros)
-3. Usa este formato para cada juego:
-   [Número]. Nombre del juego (Plataformas disponibles) - Edad recomendada: X años
-   • Descripción: Breve descripción (1-2 frases)
-   • Por qué es adecuado: Explicación específica basada en sus preferencias
-   • Precio aproximado: Indicar si es gratis, económico, medio o premium
-4. Todos los juegos deben ser apropiados para la edad indicada
-5. La respuesta debe estar completamente en español
-6. Considera sus juegos recientes para ofrecer variedad
-7. Adapta las recomendaciones a su presupuesto
-8. No repitas la información del perfil en la respuesta`;
+[Reglas]
+1. SOLO juegos reales existentes
+2. Máximo 1 juego por franquicia
+3. Priorizar juegos con buenas reseñas (Metacritic >75)
+4. Evitar contenido inapropiado para la edad
+5. Formato estricto sin desviaciones`;
 
             try {
-                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        'Content-Type': 'application/json',
-                        'HTTP-Referer': SITE_URL,
-                        'X-Title': SITE_NAME
-                    },
-                    body: JSON.stringify({
-                        model: OPENROUTER_MODEL,
-                        messages: [
-                            {
-                                role: "system",
-                                content: "Eres un experto en videojuegos que proporciona recomendaciones personalizadas."
-                            },
-                            {
-                                role: "user",
-                                content: prompt
-                            }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 2000
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || 'Error al conectar con la API');
+                // Intentar con el modelo principal primero
+                return await tryAPICall(OPENROUTER_MODEL, prompt);
+            } catch (primaryError) {
+                console.error('Error con modelo principal:', primaryError);
+                // Intentar con modelo alternativo
+                try {
+                    return await tryAPICall(OPENROUTER_ALT_MODEL, prompt);
+                } catch (altError) {
+                    console.error('Error con modelo alternativo:', altError);
+                    throw new Error('No se pudo conectar con el servicio de IA. Por favor intenta más tarde.');
                 }
-                
-                const data = await response.json();
-                
-                if (!data || !data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
-                    throw new Error('La IA no pudo generar recomendaciones');
-                }
-                
-                return data.choices[0].message.content;
-            } catch (error) {
-                console.error('Error con la API:', error);
-                throw new Error('No se pudo conectar con el servicio de IA: ' + error.message);
             }
+        }
+        
+        // Función para realizar llamadas a la API
+        async function tryAPICall(model, prompt) {
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': SITE_URL,
+                    'X-Title': SITE_NAME
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: [
+                        {
+                            role: "system",
+                            content: "Eres un experto en videojuegos que proporciona recomendaciones personalizadas con formato estricto."
+                        },
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Error al conectar con la API');
+            }
+            
+            const data = await response.json();
+            
+            if (!data || !data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
+                throw new Error('La IA no pudo generar recomendaciones');
+            }
+            
+            return data.choices[0].message.content;
         }
         
         // Función para mostrar recomendaciones
@@ -1100,6 +1140,9 @@
             document.getElementById('api-error-message').style.display = 'none';
             
             try {
+                // Actualizar estado de la API
+                await updateAPIStatus();
+                
                 // Generar recomendaciones con IA
                 const recommendations = await generateRecommendations();
                 
